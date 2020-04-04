@@ -16,6 +16,10 @@ namespace BlazorGrpc.Client
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
             builder.RootComponents.Add<App>("app");
 
+            var wasmHttpMessageHandlerType = System.Reflection.Assembly.Load("WebAssembly.Net.Http").GetType("WebAssembly.Net.Http.HttpClient.WasmHttpMessageHandler");
+            var streamingProperty = wasmHttpMessageHandlerType.GetProperty("StreamingEnabled", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static);
+            streamingProperty.SetValue(null, true, null);
+
             builder.Services.AddBaseAddressHttpClient();
 
             builder.Services.AddSingleton(services =>
